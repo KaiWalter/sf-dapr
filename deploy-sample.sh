@@ -1,12 +1,8 @@
 #!/bin/bash
 
 # Variables
-ClusterName=sf-dapr
-Password=$(pwgen 20 1)
+ClusterName=cz-kw-sf-dapr
 Subject=$ClusterName.$LOCATION.cloudapp.azure.com
-VaultName=$ClusterName-vault
-VmPassword=$(pwgen 20 1)
-VmUserName=sfadminuser
 CertPath=~/$(echo $Subject | sed 's/\.//g').pem
 
 sfctl cluster select --endpoint https://$Subject:19080 --pem $CertPath --no-verify

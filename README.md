@@ -23,11 +23,17 @@ from https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-cli
 
 ```
 sudo apt-get update
-sudo apt-get install python3
-sudo apt-get install python3-pip
+sudo apt-get install python3 -y
+sudo apt-get install python3-pip -y
 pip3 install sfctl
 export PATH=$PATH:~/.local/bin
 echo "export PATH=$PATH:~/.local/bin" >> .shellrc
+```
+
+### install Dapr
+
+```
+wget -q https://raw.githubusercontent.com/dapr/cli/master/install/install.sh -O - | /bin/bash
 ```
 
 ### install tools
