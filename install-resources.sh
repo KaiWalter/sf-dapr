@@ -1,14 +1,14 @@
 #!/bin/bash
 
-# Variables
-ClusterName=cz-kw-sf-dapr
+. ./common.sh
+
 Password=$(pwgen 20 1)
-Subject=$ClusterName.$LOCATION.cloudapp.azure.com
-VaultName=$ClusterName-vault
 RegistryName=$(echo $ClusterName | sed 's/-//g')reg
-CacheName=$ClusterName-cache
 VmPassword=$(pwgen 20 1)
 VmUserName=sfadminuser
+
+az configure --defaults location=$LOCATION group=$RESOURCE_GROUP
+az account set --subscription $SUBSCRIPTION_ID
 
 if [[ ! $(az keyvault show --name $VaultName) ]]; 
 then
@@ -20,16 +20,26 @@ then
     az acr create --name $RegistryName --admin-enabled --sku basic
 fi
 
-if [[ ! $(az redis show --name $CacheName) ]]; 
+if [[ ! $(az servicebus namespace show --name $ServiceBusNamespace) ]]; 
 then
-    az redis create --name $CacheName --sku basic --enable-non-ssl-port --vm-size c0
+    az servicebus namespace create -n $ServiceBusNamespace
 fi
 
-# Create secure five node Linux cluster. Creates a key vault in a resource group
-# and creates a certficate in the key vault. The certificate's subject name must match 
-# the domain that you use to access the Service Fabric cluster.  The certificate is downloaded locally.
+az keyvault secret set --vault-name $VaultName -n CertificatePassword --value $Password
+az keyvault secret set --vault-name $VaultName -n VmUserName --value $VmUserName
+az keyvault secret set --vault-name $VaultName -n VmPassword --value $VmPassword
+
 az sf cluster create --cluster-name $ClusterName --cluster-size 3 --os UbuntuServer1604 \
     --certificate-output-folder ~ --certificate-password $Password --certificate-subject-name $Subject \
     --vault-name $VaultName --vault-resource-group $RESOURCE_GROUP --vm-password $VmPassword --vm-user-name $VmUserName
 
+VmssName=$(az sf cluster show --cluster-name $ClusterName --query nodeTypes[0].name -o tsv)
+az vmss identity assign -n $VmssName
+AcrResourceId=$(az acr show -n $RegistryName --query id -o tsv)
+VmssIdentity=$(az vmss show -n $VmssName --query identity.principalId -o tsv)
+az role assignment create --assignee $VmssIdentity --role AcrPull --scope $AcrResourceId
 
+SbResourceId=$(az servicebus namespace show -n $ServiceBusNamespace --query id -o tsv)
+
+az role assignment create --role "Azure Service Bus Data Receiver" --assignee $VmssIdentity --scope $SbResourceId
+az role assignment create --role "Azure Service Bus Data Sender" --assignee $VmssIdentity --scope $SbResourceId

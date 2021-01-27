@@ -1,10 +1,25 @@
 #!/bin/bash
 
-# Variables
-ClusterName=cz-kw-sf-dapr
-Subject=$ClusterName.$LOCATION.cloudapp.azure.com
-CertPath=~/$(echo $Subject | sed 's/\.//g').pem
+. ./common.sh
+
+DeploymentFolder=./deploy
+
+if [[ -d $DeploymentFolder ]]; then rm -rf $DeploymentFolder; fi
+mkdir $DeploymentFolder
+cp -r ./app $DeploymentFolder
+
+RegistryLoginServer=$(az acr show -n $RegistryName --query loginServer -o tsv)
+ImageTag=invoke-receiver:$AppVersion
+
+sed -i "s/<APP VERSION>/$AppVersion/g" $DeploymentFolder/app/ApplicationManifest.xml
+sed -i "s/<APP VERSION>/$AppVersion/g" $DeploymentFolder/app/Package/ServiceManifest.xml
+sed -i "s/<LOGIN SERVER>/$RegistryLoginServer/g" $DeploymentFolder/app/Package/ServiceManifest.xml
+sed -i "s/<IMAGE TAG>/$ImageTag/g" $DeploymentFolder/app/Package/ServiceManifest.xml
+sed -i "s/<NAMESPACE NAME>/$ServiceBusNamespace/g" $DeploymentFolder/app/Package/CodeDapr/pubsub.yaml
+
 
 sfctl cluster select --endpoint https://$Subject:19080 --pem $CertPath --no-verify
+sfctl application upload --path $DeploymentFolder/app --show-progress
+sfctl application provision --application-type-build-path app
+sfctl application create --app-name fabric:/invoke-receiver --app-type invoke-receiver --app-version $AppVersion
 
-# https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-quickstart-containers-linux#get-the-application-package

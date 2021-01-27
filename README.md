@@ -27,7 +27,7 @@ sudo apt-get install python3 -y
 sudo apt-get install python3-pip -y
 pip3 install sfctl
 export PATH=$PATH:~/.local/bin
-echo "export PATH=$PATH:~/.local/bin" >> .shellrc
+echo "export PATH=$PATH:~/.local/bin" >> ~/.shellrc
 ```
 
 ### install Dapr
@@ -45,11 +45,12 @@ sudo apt-get install pwgen -y
 ### set environment variables
 
 ```
-export SUBSCRIPTION_ID={subscription-id}
-export RESOURCE_GROUP={resource-group-name}
-export LOCATION={azure-location}
-export VNET=sf-{vnet-name}
-export SUBNET={subnet-name}
+export SUBSCRIPTION_ID={subscription id to place resources in}
+export RESOURCE_GROUP={resource group name to place resources in}
+export LOCATION={azure location to place resources in}
+export VNET=sf-{vnet name}
+export SUBNET={subnet name}
+export RESOURCE_PREFIX={short prefix to make resources unique}
 ```
 
 ## install cluster
