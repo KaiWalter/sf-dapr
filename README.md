@@ -55,10 +55,28 @@ export RESOURCE_PREFIX={short prefix to make resources unique}
 
 ## install cluster
 
-###
+### login to subscription and set defaults
 
 ```
 az login --use-device-code
 az configure --defaults location=$LOCATION group=$RESOURCE_GROUP
 az account set --subscription $SUBSCRIPTION_ID
+./install-resources.sh
 ```
+
+## build & deploy app
+
+> samples apps are copied from Dapr Python SDK with `cp -r ../python-sdk/examples/invoke-simple/ .`
+
+### build
+
+- adjust AppVersion in `./common.sh`
+- execute `./build-app.sh`
+
+### deploy
+
+- execute `./deploy-app.sh`
+
+### remove
+
+- execute `./deploy-app.sh`
