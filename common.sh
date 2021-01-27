@@ -7,6 +7,7 @@ Subject=$ClusterName.$LOCATION.cloudapp.azure.com
 VaultName=$ClusterName-vault
 RegistryName=$(echo $ClusterName | sed 's/-//g')reg
 CertPath=~/$(echo $Subject | sed 's/\.//g').pem
+AppName=simple-server
 AppVersion=20210127.2
 
 # environment variables

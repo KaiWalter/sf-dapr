@@ -2,7 +2,7 @@
 
 . ./common.sh
 
-SourcePath=./invoke-simple
-ImageTag=invoke-receiver:$AppVersion
+SourcePath=./simple-server
+ImageTag=simple-server:$AppVersion
 
 az acr build -t $ImageTag -r $RegistryName $SourcePath

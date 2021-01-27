@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ApplicationManifest xmlns:xsd="https://www.w3.org/2001/XMLSchema"
-   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="invoke-receiver" ApplicationTypeVersion="<APP VERSION>"
+   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="<APP NAME>" ApplicationTypeVersion="<APP VERSION>"
    xmlns="http://schemas.microsoft.com/2011/01/fabric">
    <ServiceManifestImport>
       <ServiceManifestRef ServiceManifestName="Package" ServiceManifestVersion="<APP VERSION>" />
