@@ -10,7 +10,7 @@
       </EnvironmentOverrides>
       <Policies>
          <ContainerHostPolicies CodePackageRef="app.Code" UseTokenAuthenticationCredentials="true">
-            <PortBinding ContainerPort="50051" EndpointRef="appEndpoint" />
+            <PortBinding ContainerPort="80" EndpointRef="appEndpoint" />
          </ContainerHostPolicies>
       </Policies>
    </ServiceManifestImport>

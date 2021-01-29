@@ -44,6 +44,8 @@ sudo apt-get install pwgen -y
 
 ### set environment variables
 
+e.g. in `~/.profile`
+
 ```
 export SUBSCRIPTION_ID={subscription id to place resources in}
 export RESOURCE_GROUP={resource group name to place resources in}
@@ -59,6 +61,7 @@ export RESOURCE_PREFIX={short prefix to make resources unique}
 
 ```
 az login --use-device-code
+. ~/.profile
 az configure --defaults location=$LOCATION group=$RESOURCE_GROUP
 az account set --subscription $SUBSCRIPTION_ID
 ./install-resources.sh
@@ -79,4 +82,4 @@ az account set --subscription $SUBSCRIPTION_ID
 
 ### remove
 
-- execute `./deploy-app.sh`
+- execute `./remove-app.sh`
