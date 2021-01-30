@@ -470,6 +470,16 @@ resource clusterName_resource 'Microsoft.ServiceFabric/clusters@2018-02-01' = {
         ]
         name: 'Security'
       }
+      // https://github.com/microsoft/service-fabric/blob/7f30ccea5cbca3e6ecf3a55b3d1cf34d7c3bd143/src/prod/src/Hosting2/HostingConfig.h#L402
+      {
+        parameters: [
+          {
+            name: 'ContainerServiceArguments'
+            value: '--default-ipc-mode shareable -H localhost:2375 -H unix:///var/run/docker.sock'
+          }
+        ]
+        name: 'Hosting'
+      }
     ]
     managementEndpoint: 'https://${lb_resource.properties.frontendIPConfigurations[0].properties.privateIPAddress}:${nt0fabricHttpGatewayPort}'
     nodeTypes: [

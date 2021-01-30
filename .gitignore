@@ -1,3 +1,6 @@
 deploy/
 dist/
 .cert/
+
+bin/
+obj/

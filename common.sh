@@ -11,8 +11,8 @@ ClusterCertificatePath=.cert/$(echo $ClusterCertificateSubject | sed 's/\.//g').
 AdminCertificatePfxPath=.cert/$(echo $AdminCertificateSubject | sed 's/\.//g').pfx
 AdminCertificatePemPath=.cert/$(echo $AdminCertificateSubject | sed 's/\.//g').pem
 AdminCertificateCrtPath=.cert/$(echo $AdminCertificateSubject | sed 's/\.//g').crt
-AppName=simple-server
-AppVersion=20210128.2
+AppName=simple-dapr-server-cs
+AppVersion=20210205.2
 
 if [[ ! -d .cert ]]; then mkdir .cert; fi
 

@@ -2,7 +2,7 @@
 
 . ./common.sh
 
-SourcePath=./simple-server
-ImageTag=simple-server:$AppVersion
+SourcePath=./$AppName
+ImageTag=$AppName:$AppVersion
 
 az acr build -t $ImageTag -r $RegistryName $SourcePath

@@ -74,3 +74,7 @@ dapr run --app-id invoke-caller --app-protocol grpc python3 invoke-caller.py
    ```
    kubectl logs -l app="invokereceiver" -c invokereceiver
    ```
+
+## references
+
+https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-service-model-schema

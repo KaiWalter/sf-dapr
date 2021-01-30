@@ -1,0 +1,3 @@
+flask
+dapr-ext-grpc-dev >= 1.0.0rc3.dev
+dapr-dev >= 1.0.0rc3.dev

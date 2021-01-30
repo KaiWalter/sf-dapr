@@ -11,18 +11,29 @@
       <EntryPoint>
          <ContainerHost>
             <ImageName><LOGIN SERVER>/<IMAGE TAG></ImageName>
-            <Commands></Commands>
          </ContainerHost>
       </EntryPoint>
       <EnvironmentVariables>
-         <EnvironmentVariable Name="DAPR_HTTP_PORT" Value="3500"/>
-         <EnvironmentVariable Name="DAPR_GRPC_PORT" Value="43693"/>
+         <EnvironmentVariable Name="DAPR_HTTP_PORT" Value=""/>
+         <EnvironmentVariable Name="DAPR_GRPC_PORT" Value=""/>
       </EnvironmentVariables>
+   </CodePackage>
+
+   <CodePackage Name="dapr.Code" Version="<APP VERSION>">
+      <EntryPoint>
+         <ContainerHost>
+            <ImageName>docker.io/daprio/daprd:1.0.0-rc.3</ImageName>
+            <EntryPoint>/daprd</EntryPoint>
+            <Commands>--dapr-http-port,3500,--dapr-grpc-port,50001,--app-port,50051,--app-id,<APP NAME></Commands>
+         </ContainerHost>
+      </EntryPoint>
    </CodePackage>
 
    <Resources>
       <Endpoints>
-         <Endpoint Name="appEndpoint" UriScheme="http"/>
+         <Endpoint Name="appEndpoint" UriScheme="tcp"/>
+         <Endpoint Name="daprHttpEndpoint" UriScheme="http"/>
+         <Endpoint Name="daprGrpcEndpoint" UriScheme="tcp"/>
       </Endpoints>
    </Resources>
 

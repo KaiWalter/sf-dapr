@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ApplicationManifest xmlns:xsd="https://www.w3.org/2001/XMLSchema"
+   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" ApplicationTypeName="<APP NAME>" ApplicationTypeVersion="<APP VERSION>"
+   xmlns="http://schemas.microsoft.com/2011/01/fabric">
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="Package" ServiceManifestVersion="<APP VERSION>" />
+      <EnvironmentOverrides CodePackageRef="app.Code">
+         <EnvironmentVariable Name="DAPR_HTTP_PORT" Value="3500"/>
+         <EnvironmentVariable Name="DAPR_GRPC_PORT" Value="50001"/>
+      </EnvironmentOverrides>
+      <Policies>
+         <ContainerHostPolicies CodePackageRef="app.Code" UseTokenAuthenticationCredentials="true">
+            <PortBinding ContainerPort="50051" EndpointRef="appEndpoint" />
+         </ContainerHostPolicies>
+         <ContainerHostPolicies CodePackageRef="dapr.Code">
+            <PortBinding ContainerPort="3500" EndpointRef="daprHttpEndpoint" />
+            <PortBinding ContainerPort="50001" EndpointRef="daprGrpcEndpoint" />
+         </ContainerHostPolicies>
+         <NetworkPolicies>
+            <ContainerNetworkPolicy NetworkRef="<APP NAME>" />
+         </NetworkPolicies>
+      </Policies>
+      <CodePackagePolicy CodePackageRef="dapr.Code">
+         <Probes>
+            <Probe Type="Liveness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="3" PeriodSeconds="6" TimeoutSeconds="60">
+               <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+               </HttpGet>
+            </Probe>
+            <Probe Type="Readyness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="60" PeriodSeconds="6" TimeoutSeconds="3">
+               <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+               </HttpGet>
+            </Probe>
+         </Probes>
+      </CodePackagePolicy>
+   </ServiceManifestImport>
+
+   <DefaultServices>
+      <Service Name="apphost">
+         <StatelessService ServiceTypeName="appType" InstanceCount="1">
+            <SingletonPartition />
+         </StatelessService>
+      </Service>
+   </DefaultServices>
+</ApplicationManifest> 

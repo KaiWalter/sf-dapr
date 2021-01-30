@@ -12,12 +12,40 @@
          <ContainerHostPolicies CodePackageRef="app.Code" UseTokenAuthenticationCredentials="true">
             <PortBinding ContainerPort="80" EndpointRef="appEndpoint" />
          </ContainerHostPolicies>
+         <NetworkPolicies>
+            <ContainerNetworkPolicy NetworkRef="<APP NAME>" />
+         </NetworkPolicies>
+      </Policies>
+      <CodePackagePolicy CodePackageRef="app.Code">
+         <Probes>
+            <Probe Type="Liveness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="10" PeriodSeconds="30" TimeoutSeconds="20">
+               <HttpGet Path="/" Port="80" Scheme="http">
+               </HttpGet>
+            </Probe>
+         </Probes>
+      </CodePackagePolicy>
+   </ServiceManifestImport>
+
+   <ServiceManifestImport>
+      <ServiceManifestRef ServiceManifestName="PackageDapr" ServiceManifestVersion="<APP VERSION>" />
+      <Policies>
+         <ContainerHostPolicies CodePackageRef="dapr.Code">
+            <PortBinding ContainerPort="3500" EndpointRef="daprEndpoint" />
+         </ContainerHostPolicies>
+         <NetworkPolicies>
+            <ContainerNetworkPolicy NetworkRef="<APP NAME>" />
+         </NetworkPolicies>
       </Policies>
    </ServiceManifestImport>
 
    <DefaultServices>
       <Service Name="apphost">
          <StatelessService ServiceTypeName="appType" InstanceCount="1">
+            <SingletonPartition />
+         </StatelessService>
+      </Service>
+      <Service Name="dapr">
+         <StatelessService ServiceTypeName="daprType" InstanceCount="1">
             <SingletonPartition />
          </StatelessService>
       </Service>

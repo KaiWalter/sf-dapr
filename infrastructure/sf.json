@@ -493,6 +493,15 @@
               }
             ],
             "name": "Security"
+          },
+          {
+            "parameters": [
+              {
+                "name": "ContainerServiceArguments",
+                "value": "--default-ipc-mode shareable -H localhost:2375 -H unix:///var/run/docker.sock"
+              }
+            ],
+            "name": "Hosting"
           }
         ],
         "managementEndpoint": "[format('https://{0}:{1}', reference(resourceId('Microsoft.Network/loadBalancers', variables('lbName'))).frontendIPConfigurations[0].properties.privateIPAddress, variables('nt0fabricHttpGatewayPort'))]",

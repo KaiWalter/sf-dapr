@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest xmlns:xsd="https://www.w3.org/2001/XMLSchema"
+   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" Name="PackageDapr" Version="<APP VERSION>"
+   xmlns="http://schemas.microsoft.com/2011/01/fabric">
+   <ServiceTypes>
+      <StatelessServiceType ServiceTypeName="daprType" UseImplicitHost="true">
+      </StatelessServiceType>
+   </ServiceTypes>
+
+   <CodePackage Name="dapr.Code" Version="<APP VERSION>">
+      <EntryPoint>
+         <ContainerHost>
+            <ImageName>docker.io/daprio/daprd:1.0.0-rc.2</ImageName>
+            <Commands>/daprd, --dapr-http-port, 3500, --dapr-grpc-port, 50001, --app-port, 80, --app-id, <APP NAME>, --app-protocol, http</Commands>
+         </ContainerHost>
+      </EntryPoint>
+   </CodePackage>
+
+   <Resources>
+      <Endpoints>
+         <Endpoint Name="daprEndpoint" UriScheme="http"/>
+      </Endpoints>
+   </Resources>
+
+</ServiceManifest> 
