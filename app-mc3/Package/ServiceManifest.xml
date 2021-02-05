@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceManifest xmlns:xsd="https://www.w3.org/2001/XMLSchema"
+   xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" Name="Package" Version="<APP VERSION>"
+   xmlns="http://schemas.microsoft.com/2011/01/fabric">
+   <ServiceTypes>
+      <StatelessServiceType ServiceTypeName="appType" UseImplicitHost="true">
+      </StatelessServiceType>
+   </ServiceTypes>
+
+   <CodePackage Name="app.Code" Version="<APP VERSION>">
+      <EntryPoint>
+         <ContainerHost>
+            <ImageName><LOGIN SERVER>/<IMAGE TAG></ImageName>
+         </ContainerHost>
+      </EntryPoint>
+      <EnvironmentVariables>
+         <EnvironmentVariable Name="DAPR_HTTP_PORT" Value=""/>
+         <EnvironmentVariable Name="DAPR_GRPC_PORT" Value=""/>
+      </EnvironmentVariables>
+   </CodePackage>
+
+   <CodePackage Name="dapr.Code" Version="<APP VERSION>">
+      <EntryPoint>
+         <ContainerHost>
+            <ImageName>docker.io/daprio/daprd:1.0.0-rc.3</ImageName>
+            <EntryPoint>/daprd</EntryPoint>
+            <Commands>--dapr-http-port,3500,--dapr-grpc-port,50001,--app-port,80,--app-protocol,http,--app-id,<APP NAME></Commands>
+         </ContainerHost>
+      </EntryPoint>
+   </CodePackage>
+
+   <Resources>
+      <Endpoints>
+         <Endpoint Name="appEndpoint" UriScheme="http"/>
+         <Endpoint Name="daprHttpEndpoint" UriScheme="http"/>
+         <Endpoint Name="daprGrpcEndpoint" UriScheme="tcp"/>
+      </Endpoints>
+   </Resources>
+
+</ServiceManifest> 
