@@ -29,3 +29,5 @@ sfctl application upload --path $DeploymentFolder/$AppFolder --show-progress
 sfctl application provision --application-type-build-path $AppFolder
 sfctl application create --app-name fabric:/$AppName --app-type $AppName --app-version $AppVersion
 
+sfctl service list --application-id $AppName
+sfctl service info --application-id $AppName --service-id $AppName~apphost
