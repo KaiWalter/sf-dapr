@@ -12,7 +12,7 @@ AdminCertificatePfxPath=.cert/$(echo $AdminCertificateSubject | sed 's/\.//g').p
 AdminCertificatePemPath=.cert/$(echo $AdminCertificateSubject | sed 's/\.//g').pem
 AdminCertificateCrtPath=.cert/$(echo $AdminCertificateSubject | sed 's/\.//g').crt
 AppName=simple-dapr-server-cs
-AppVersion=20210205.2
+AppVersion=20210212.1
 
 if [[ ! -d .cert ]]; then mkdir .cert; fi
 

@@ -9,29 +9,46 @@
          <EnvironmentVariable Name="DAPR_GRPC_PORT" Value="50001"/>
       </EnvironmentOverrides>
       <Policies>
-         <ContainerHostPolicies CodePackageRef="app.Code" UseTokenAuthenticationCredentials="true">
-            <PortBinding ContainerPort="80" EndpointRef="appEndpoint" />
-         </ContainerHostPolicies>
-         <ContainerHostPolicies CodePackageRef="dapr.Code">
-            <PortBinding ContainerPort="3500" EndpointRef="daprHttpEndpoint" />
-            <PortBinding ContainerPort="50001" EndpointRef="daprGrpcEndpoint" />
-         </ContainerHostPolicies>
          <NetworkPolicies>
             <ContainerNetworkPolicy NetworkRef="<APP NAME>" />
          </NetworkPolicies>
-         <CodePackagePolicy CodePackageRef="dapr.Code">
+
+         <ContainerHostPolicies CodePackageRef="app.Code" UseTokenAuthenticationCredentials="true">
+            <PortBinding ContainerPort="80" EndpointRef="appEndpoint" />
+         </ContainerHostPolicies>
+         <CodePackagePolicy CodePackageRef="app.Code">
             <Probes>
                <Probe Type="Liveness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="3" PeriodSeconds="6" TimeoutSeconds="60">
-                  <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+                  <HttpGet Path="/" Port="80" Scheme="http">
                   </HttpGet>
                </Probe>
                <Probe Type="Readiness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="60" PeriodSeconds="6" TimeoutSeconds="3">
-                  <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+                  <HttpGet Path="/" Port="80" Scheme="http">
                   </HttpGet>
                </Probe>
             </Probes>
          </CodePackagePolicy>
-      </Policies>      
+
+         <ContainerHostPolicies CodePackageRef="dapr.Code">
+            <PortBinding ContainerPort="3500" EndpointRef="daprHttpEndpoint" />
+            <PortBinding ContainerPort="50001" EndpointRef="daprGrpcEndpoint" />
+         </ContainerHostPolicies>
+         <CodePackagePolicy CodePackageRef="dapr.Code">
+            <Probes>
+               <Probe Type="Liveness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="3" PeriodSeconds="6" TimeoutSeconds="60">
+                  <TcpSocket Port="3500"/>
+                  <!-- Restarting the container because Liveness Http probe for CodePackage=dapr.Code with Command=NA failed with ExitCode=NA, StdOut=, StdErr=, ErrorCode=E_FAIL Action=OnReadHeaders failed. ErrorCode=0, Message=Success, description=No content-length in repsonse header HttpStatusCode:204, Response:, ConsecutiveFailures=5 after ConsecutiveSuccess=0 -->
+                  <!--<HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+                  </HttpGet>-->
+               </Probe>
+               <Probe Type="Readiness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="60" PeriodSeconds="6" TimeoutSeconds="3">
+                  <TcpSocket Port="3500"/>
+                  <!--<HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+                  </HttpGet>-->
+               </Probe>
+            </Probes>
+         </CodePackagePolicy>
+      </Policies>
    </ServiceManifestImport>
 
    <DefaultServices>
