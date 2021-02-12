@@ -111,3 +111,9 @@ az account set --subscription $SUBSCRIPTION_ID
 ### remove
 
 - execute `./remove-app.sh`
+
+---
+
+## Links
+
+- [Service model XML schema documentation](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-service-model-schema)

@@ -31,3 +31,8 @@ sfctl application create --app-name fabric:/$AppName --app-type $AppName --app-v
 
 sfctl service list --application-id $AppName
 sfctl service info --application-id $AppName --service-id $AppName~apphost
+sfctl service resolve --service-id $AppName~apphost
+
+# appEndpoint=$(sfctl service resolve --service-id $AppName~apphost | jq -r '.endpoints[0].address' | jq -r '.Endpoints.appEndpoint')
+# echo $appEndpoint
+# curl -v $appEndpoint
