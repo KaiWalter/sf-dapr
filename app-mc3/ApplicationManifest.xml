@@ -19,19 +19,19 @@
          <NetworkPolicies>
             <ContainerNetworkPolicy NetworkRef="<APP NAME>" />
          </NetworkPolicies>
-      </Policies>
-      <CodePackagePolicy CodePackageRef="dapr.Code">
-         <Probes>
-            <Probe Type="Liveness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="3" PeriodSeconds="6" TimeoutSeconds="60">
-               <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
-               </HttpGet>
-            </Probe>
-            <Probe Type="Readyness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="60" PeriodSeconds="6" TimeoutSeconds="3">
-               <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
-               </HttpGet>
-            </Probe>
-         </Probes>
-      </CodePackagePolicy>
+         <CodePackagePolicy CodePackageRef="dapr.Code">
+            <Probes>
+               <Probe Type="Liveness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="3" PeriodSeconds="6" TimeoutSeconds="60">
+                  <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+                  </HttpGet>
+               </Probe>
+               <Probe Type="Readiness" FailureThreshold="5" SuccessThreshold="2" InitialDelaySeconds="60" PeriodSeconds="6" TimeoutSeconds="3">
+                  <HttpGet Path="/v1.0/healthz" Port="3500" Scheme="http">
+                  </HttpGet>
+               </Probe>
+            </Probes>
+         </CodePackagePolicy>
+      </Policies>      
    </ServiceManifestImport>
 
    <DefaultServices>
